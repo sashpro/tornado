@@ -26,8 +26,8 @@ class AnalyzeHandler(tornado.web.RequestHandler):
             link = a[0]
             start = time.time()
             http_client = AsyncHTTPClient()
-            # resp = yield http_client.fetch(link)
-            resp = yield gen.Task(http_client.fetch, link)
+            resp = yield http_client.fetch(link)
+            # resp = await gen.Task(http_client.fetch, link)
             print(time.time()-start, link)
             soup = BeautifulSoup(resp.body,"html.parser")
             links['links'].append({

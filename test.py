@@ -23,15 +23,15 @@ class TestApp(AsyncHTTPTestCase):
 
     #         it.next()
 
-    @gen_test(timeout=5)
+    @gen_test()
     def test_analyze(self):
         # post_data = { 'url': 'http://www.google.com;'}
-        post_data = { 'url': 'http://127.0.0.1:3000 https://codeguida.com http://127.0.0.1:3000'} 
-        body = urllib.parse.urlencode(post_data)
+        # post_data = { 'url': 'http://127.0.0.1:3000 https://codeguida.com http://127.0.0.1:3000'} 
+        # body = urllib.parse.urlencode(post_data)
         # response = yield self.http_client.fetch(self.get_url('/analyze'), method='POST', headers=None, body=body)
-        tasks = ['k%s'%i for i in range(11)]
+        tasks = ['task%s'%i for i in range(1000)]
         # print(list(tasks))
-        # http_client = httpclient.AsyncHTTPClient()
+        http_client = httpclient.AsyncHTTPClient(self.io_loop)
         urls = ['http://google.com', 'http://gmail.com', 'http://codeguida.com', 'http://twitter.com','http://linkedin.com']
         
         for task in tasks:
@@ -44,7 +44,7 @@ class TestApp(AsyncHTTPTestCase):
 
         # print(response)
         for resp in response:
-            print(resp.body)
+            # print(resp.body)
             self.assertEqual(resp.code, 200)
 
         # self.assertEqual(response.body, b'Hello, world')    
