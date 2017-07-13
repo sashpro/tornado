@@ -2,7 +2,7 @@
 import tornado.ioloop
 import tornado.web
 from tornado import gen
-from tornado.httpclient import AsyncHTTPClient
+from tornado.httpclient import AsyncHTTPClient, HTTPRequest
 from tornado.web import asynchronous
 from bs4 import BeautifulSoup
 import time
@@ -10,7 +10,6 @@ import re
 
 
 class AnalyzeHandler(tornado.web.RequestHandler):
-    @asynchronous
     @gen.coroutine
     # @gen.engine    
     # @shortgen    
@@ -18,26 +17,32 @@ class AnalyzeHandler(tornado.web.RequestHandler):
         
         links = {'links':[]}  
         url=''.join(self.get_arguments('url'))
-        comp = re.compile(r'(((http|https):\/\/)?(w{3}\.)?(\w+\.?)+(:\d{4})?)') 
+        comp = re.compile(r'https?://[^\s]+') 
         adr = comp.findall(url)
-        for a in adr:
-            print(url)
 
-            link = a[0]
-            start = time.time()
-            http_client = AsyncHTTPClient()
-            resp = yield http_client.fetch(link)
+        print(url)
+
+        link = a[0]
+        start = time.time()
+        http_client = AsyncHTTPClient()
+        response_futures = [
+            http_client.fetch(HTTPRequest(url, request_timeout=self.request_timeout)) for url in adr]
+        responses = yield response_futures
+            #resp = yield http_client.fetch(link)
             # resp = await gen.Task(http_client.fetch, link)
-            print(time.time()-start, link)
-            soup = BeautifulSoup(resp.body,"html.parser")
-            links['links'].append({
-                   "url": link,
-                   "title": soup.find('title').getText()
-                })
-        # data = yield self.analyze()
-        # print(links)    
-        self.write(links)
-        self.finish()
+            #print(time.time()-start, link)
+        for url, response in zip(urls, responses):
+            body_data = response.body
+            soup = BeautifulSoup(body_data, 'html.parser')
+            links.append(
+                {
+                    'url': url,
+                    'title': soup.find('title').contents[0],
+                }
+            )
+
+        response = {'links': links}
+        self.write(json.dumps(response))
 
 
 class MainHandler(tornado.web.RequestHandler):

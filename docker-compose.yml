@@ -1,0 +1,12 @@
+tornado:
+  image: python:3.5.2
+  volumes:
+    - ./:/code
+  working_dir: /code
+  container_name: tornado
+  environment:
+    - APPLICATION_PORT=${PORT}
+  ports:
+    - ${APPLICATION_PORT}:${APPLICATION_PORT}
+  command: /bin/bash -c "pip install -r requirements.txt && exec invoke run_dev"
+    
