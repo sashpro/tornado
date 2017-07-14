@@ -7,6 +7,6 @@ tornado:
   environment:
     - APPLICATION_PORT=${PORT}
   ports:
-    - ${APPLICATION_PORT}:${APPLICATION_PORT}
+    - ${PORT}:${PORT}
   command: /bin/bash -c "pip install -r requirements.txt && exec invoke run_dev"
     
