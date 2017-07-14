@@ -36,3 +36,8 @@ class TestApp(AsyncTestCase):
         for resp in response:
             self.assertEqual(json.loads(resp.body.decode()), self.expected_response)
 
+        # self.assertEqual(response.body, b'Hello, world')    
+    # def test_homepage(self):
+    #     response = self.fetch('/')
+    #     self.assertEqual(response.code, 200)
+    #     self.assertEqual(response.body, 'Hello, world')
