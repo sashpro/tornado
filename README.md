@@ -1,9 +1,6 @@
+# Tornado server
 
-
-#TORNADO SERVER
-
-
-##Task
+## Task
 
 Implement a web service that given a request with plain text containing urls returns json with urls' titles. See example below. The service should handle 1000 concurrent requests.
 
@@ -26,7 +23,7 @@ Response:
 }
 
 
-##Installation
+## Installation
 
 git clone https://github.com/sashpro/tornado
 cd tornado
