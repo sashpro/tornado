@@ -36,9 +36,9 @@ By defaut server listens at 9000 port
 Tests execution is done with Tornado's testing framework:
 ```
 docker exec -it tornado python3 -m tornado.testing test
-'''
+```
 
-##Result
+## Result
 Hardware: CPU Intel® Core™ i5-7200U CPU @ 2.50GHz × 4, OM 8Gb
 Test execution time (1000 connections, 1 link per connection) : ~50s
   
